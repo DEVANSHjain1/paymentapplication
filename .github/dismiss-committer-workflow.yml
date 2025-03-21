@@ -1,0 +1,43 @@
+name: Dismiss Committer Approval
+
+on:
+  pull_request:
+    types: [review_requested, review_submitted, opened, edited, synchronize]
+
+jobs:
+  dismiss-approval:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if approval is from the committer
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+
+            // Get the committer's GitHub username
+            const committer = pr.data.user.login;
+
+            // Fetch all the reviews for the PR
+            const reviews = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+
+            // Iterate through reviews and dismiss if it's the committer
+            for (const review of reviews.data) {
+              if (review.user.login === committer && review.state === 'APPROVED') {
+                await github.rest.pulls.dismissReview({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.payload.pull_request.number,
+                  review_id: review.id,
+                  message: 'Automatically dismissed approval from committer.',
+                });
+              }
+            }
