@@ -5,7 +5,7 @@ on:
     types: [submitted]  # Trigger when a review is submitted (approved, changes requested, etc.)
 
 jobs:
-  dismiss-approval:
+  check-committer-approval:
     runs-on: ubuntu-latest
 
     steps:
