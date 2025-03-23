@@ -1,4 +1,4 @@
-oname: Dismiss PR Approval
+name: Dismiss PR Approval
 
 on:
   pull_request_review:
