@@ -31,6 +31,9 @@ jobs:
           # Set the authors as an environment variable
           echo "commits_authors=$COMMITS_AUTHORS" >> $GITHUB_ENV
           echo "$COMMITS_AUTHORS"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token to authenticate API calls
+          
       - name: Get the reviewer and committer details
         id: review
         run: |
