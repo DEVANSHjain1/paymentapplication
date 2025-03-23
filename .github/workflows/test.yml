@@ -18,6 +18,7 @@ jobs:
         id: commits
         run: |
           # Fetch the commits
+          echo "GITHUB_TOKEN: $GITHUB_TOKEN"
           PR_COMMITS=$(curl -L -k \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
